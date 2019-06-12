@@ -28,4 +28,3 @@ print('statsmodels: %s' % statsmodels.__version__)
 os.system("pip install sklearn")
 import sklearn
 print('sklearn: %s' % sklearn.__version__)
-
