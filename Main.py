@@ -49,7 +49,8 @@ print("#####################################################\n")
 
 #Shuffle and Split Dataset in Train and Trest Datasets
 
-variables = pd.DataFrame(np.c_[pandasDataframe['LSTAT'], pandasDataframe['RM']], columns = ['LSTAT','RM'])
+#variables = pd.DataFrame(np.c_[pandasDataframe['LSTAT'], pandasDataframe['RM']], columns = ['LSTAT','RM'])
+variables = pd.DataFrame(np.c_[pandasDataframe['LSTAT']], columns = ['LSTAT'])
 target = pandasDataframe['target']
 
 variables_train, variables_test, target_train, target_test = train_test_split(variables, target, test_size = 0.2, random_state=5)
@@ -59,8 +60,24 @@ print("variables_test (Row,Col) ->", variables_test.shape)
 print("target_train (Row,Col) ->", target_train.shape)
 print("target_test (Row,Col) ->", target_test.shape)
 
+# LinearRegression Factory
+linearRegression = linear_model.LinearRegression()
 
+#Train the model
+linearRegression.fit(variables_train,target_train)
 
+#Predict the result
+variablesPredicted = linearRegression.predict(variables_train)
 
+# The Coefficient (m)
+print('\nCoefficient (m): ', linearRegression.coef_[0])
+# The Independent term (b) (valor que corta el eje en X=0)
+print('\nIndependent term (b): ', linearRegression.intercept_)
+# Mean squared error
+print("\nMean squared error: %.2f" % mean_squared_error(target_train, variablesPredicted))
+# Variance score. (The best score is 1.0)
+print('Variance score: %.2f' % r2_score(target_train, variablesPredicted))
 
-print("Done!")
+print("\ny =   mX  +  b \ny = ",linearRegression.coef_[0],"* X +",linearRegression.intercept_);
+
+print("\nDone!")
