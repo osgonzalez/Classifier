@@ -45,6 +45,7 @@ print("#####################################################\n")
 
 
 
+print("\n################# Single Variable Resgresion (LSTAT) #################")
 
 
 #Shuffle and Split Dataset in Train and Trest Datasets
@@ -80,4 +81,61 @@ print('Variance score: %.2f' % r2_score(target_train, variablesPredicted))
 
 print("\ny =   mX  +  b \ny = ",linearRegression.coef_[0],"* X +",linearRegression.intercept_);
 
-print("\nDone!")
+
+
+
+print("\nThe predicted target of 5 is", linearRegression.predict(np.array([[5]])))
+print("The predicted target of 15 is", linearRegression.predict(np.array([[15]])))
+print("The predicted target of 20 is", linearRegression.predict(np.array([[20]])))
+print("The predicted target of 25 is", linearRegression.predict(np.array([[25]])))
+
+print("\n################# Done #################")
+
+
+
+
+
+
+
+
+
+
+
+print("\n\n\n################# MultiVariable Resgresion (LSTAT and AGE) #################")
+
+
+multiVariables = pd.DataFrame(np.c_[pandasDataframe['LSTAT'], pandasDataframe['AGE']], columns = ['LSTAT','AGE'])
+target = pandasDataframe['target']
+
+multiVariables_train, multiVariables_test, target_train, target_test = train_test_split(multiVariables, target, test_size = 0.2, random_state=5)
+
+# LinearRegression Factory
+regressionMulti = linear_model.LinearRegression()
+
+#Train the model
+regressionMulti.fit(multiVariables_train,target_train)
+
+#Predict the result
+multiVariablesPredicted = regressionMulti.predict(multiVariables_train)
+
+# The Coefficient (m)
+print('\nCoefficient (m_1 and m_2): ', regressionMulti.coef_)
+# The Independent term (b) (valor que corta el eje en X=0)
+print('\nIndependent term (b): ', regressionMulti.intercept_)
+# Mean squared error
+print("\nMean squared error: %.2f" % mean_squared_error(target_train, multiVariablesPredicted))
+# Variance score. (The best score is 1.0)
+print('Variance score: %.2f' % r2_score(target_train, multiVariablesPredicted))
+
+print("\ny =   m_1 * X  + m_2 * Z +  b \ny = ",regressionMulti.coef_[0],"* X +",regressionMulti.coef_[1],"* Z +",regressionMulti.intercept_);
+
+
+print("\nThe predicted target of LSTAT: 5 and AGE: 65 is", regressionMulti.predict(np.array([[5,65]]))," (The real target is 24)")
+print("The predicted target with only LSTAT: 5 is", linearRegression.predict(np.array([[5]])))
+
+print("\nThe predicted target of LSTAT: 20 and AGE: 94 is", regressionMulti.predict(np.array([[20,94]]))," (The real target is 15)")
+print("The predicted target with only LSTAT: 20 is", linearRegression.predict(np.array([[20]])))
+
+
+print("\n################# Done #################")
+
